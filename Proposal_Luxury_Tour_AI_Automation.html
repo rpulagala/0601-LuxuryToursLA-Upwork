@@ -322,6 +322,44 @@
     }
     .q-item p { margin: 0; font-size: 13.5px; }
 
+    /* ── DEMO BUTTON ── */
+    .demo-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #d4a017;
+      color: #fff;
+      font-weight: 700;
+      font-size: 14px;
+      text-decoration: none;
+      padding: 11px 22px;
+      border-radius: 6px;
+      letter-spacing: 0.3px;
+      transition: background 0.2s;
+    }
+    .demo-btn:hover { background: #b8860b; }
+    .demo-banner {
+      background: linear-gradient(135deg, #1a0a00 0%, #3d1a00 100%);
+      border-radius: 10px;
+      padding: 28px 32px;
+      margin: 24px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .demo-banner .demo-text h3 {
+      color: #d4a017;
+      font-size: 17px;
+      margin: 0 0 6px;
+    }
+    .demo-banner .demo-text p {
+      color: rgba(255,255,255,0.72);
+      font-size: 13px;
+      margin: 0;
+    }
+
     /* ── FOOTER ── */
     .footer {
       background: #1a0a00;
@@ -366,6 +404,15 @@
         <label>Prepared By</label>
         <span>Raj Pulagala</span>
       </div>
+      <div class="cover-meta-item" style="margin-left:auto">
+        <label>Live Demo</label>
+        <a href="https://0601-luxurytoursla-upwork.streamlit.app/" target="_blank"
+           style="display:inline-flex;align-items:center;gap:6px;background:#d4a017;color:#fff;
+                  font-size:13px;font-weight:700;padding:7px 16px;border-radius:5px;
+                  text-decoration:none;letter-spacing:0.3px">
+          ▶ &nbsp;View Live App
+        </a>
+      </div>
     </div>
   </div>
 
@@ -379,6 +426,19 @@
 
     <div class="highlight">
       <strong>Core philosophy:</strong> Every part of this system should work without a human in the loop. You should wake up each morning to booked experiences, collected documents, fresh reviews, and warm leads — not a to-do list of follow-ups.
+    </div>
+
+    <!-- LIVE DEMO BANNER -->
+    <div class="demo-banner">
+      <div class="demo-text">
+        <h3>🎮 &nbsp;See the Full System — Live Demo</h3>
+        <p>I built a working prototype of this entire system. All 9 screens are functional:<br>
+           AI lead pipeline · SMS qualification chat · Digital waivers · Sales dashboard ·
+           Post-experience automation · Retention campaigns · Voice agent · Content generator.</p>
+      </div>
+      <a href="https://0601-luxurytoursla-upwork.streamlit.app/" target="_blank" class="demo-btn">
+        ▶ &nbsp;Launch Live Demo
+      </a>
     </div>
 
     <!-- SYSTEM ARCHITECTURE -->
@@ -724,6 +784,13 @@
         <div class="card-title"><span class="dot"></span>CRM + Sales Dashboard Build</div>
         <p>Built GoHighLevel pipelines with full sales attribution, team-level reporting, and historical data migration from spreadsheets — management can filter by rep, product, and date range in real time.</p>
       </div>
+    </div>
+
+    <div class="highlight" style="margin-top:8px">
+      <strong>Live proof:</strong> Every feature described above is demonstrated in the working prototype I built for this proposal —
+      <a href="https://0601-luxurytoursla-upwork.streamlit.app/" target="_blank" style="color:#3d1a00;font-weight:700">
+        0601-luxurytoursla-upwork.streamlit.app
+      </a>
     </div>
 
     <!-- QUESTIONS -->
