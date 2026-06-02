@@ -33,7 +33,7 @@ Scoring guide — N should be an integer:
 - Solo/pair AND budget $500+: score 7 or 8
 - Budget unclear or under $500: score 4 to 6"""
 
-MODEL = "gemini-2.0-flash"
+MODEL = "gemini-2.5-flash"
 
 
 def _get_api_key() -> str:
