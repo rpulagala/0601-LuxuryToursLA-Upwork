@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Proposal — AI Automation System for Luxury Tour & Driving Experience Business</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #1a1a2e;
+      background: #f5f7fa;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .page {
+      max-width: 880px;
+      margin: 40px auto;
+      background: #fff;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.10);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    /* ── COVER ── */
+    .cover {
+      background: linear-gradient(135deg, #1a0a00 0%, #3d1a00 50%, #1a0a00 100%);
+      color: #fff;
+      padding: 70px 60px 60px;
+      position: relative;
+      overflow: hidden;
+    }
+    .cover::before {
+      content: '';
+      position: absolute;
+      top: -80px; right: -80px;
+      width: 360px; height: 360px;
+      background: rgba(212, 160, 23, 0.15);
+      border-radius: 50%;
+    }
+    .cover::after {
+      content: '';
+      position: absolute;
+      bottom: -60px; left: -60px;
+      width: 240px; height: 240px;
+      background: rgba(212, 160, 23, 0.08);
+      border-radius: 50%;
+    }
+    .cover-tag {
+      display: inline-block;
+      background: #d4a017;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 4px;
+      margin-bottom: 28px;
+      position: relative; z-index: 1;
+    }
+    .cover h1 {
+      font-size: 32px;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 14px;
+      position: relative; z-index: 1;
+    }
+    .cover h1 span { color: #d4a017; }
+    .cover .subtitle {
+      font-size: 16px;
+      color: rgba(255,255,255,0.78);
+      max-width: 580px;
+      position: relative; z-index: 1;
+    }
+    .cover-meta {
+      display: flex;
+      gap: 36px;
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255,255,255,0.15);
+      position: relative; z-index: 1;
+      flex-wrap: wrap;
+    }
+    .cover-meta-item label {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 4px;
+    }
+    .cover-meta-item span {
+      font-size: 15px;
+      font-weight: 600;
+      color: #d4a017;
+    }
+
+    /* ── BODY SECTIONS ── */
+    .body { padding: 52px 60px; }
+
+    h2 {
+      font-size: 20px;
+      font-weight: 800;
+      color: #1a0a00;
+      margin: 44px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #d4a017;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    h2 .icon { font-size: 20px; }
+    h2:first-of-type { margin-top: 0; }
+
+    h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: #3d1a00;
+      margin: 22px 0 8px;
+    }
+
+    p { margin-bottom: 12px; color: #2d2d2d; }
+
+    ul, ol {
+      padding-left: 20px;
+      margin-bottom: 12px;
+    }
+    li { margin-bottom: 5px; color: #2d2d2d; }
+
+    /* ── CARDS ── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 18px 0;
+    }
+    .card-grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+      margin: 18px 0;
+    }
+    .card {
+      background: #faf7f2;
+      border: 1px solid #e8dcc8;
+      border-radius: 8px;
+      padding: 18px;
+    }
+    .card .card-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #3d1a00;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .card .card-title .dot {
+      width: 8px; height: 8px;
+      background: #d4a017;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .card p, .card li { font-size: 13px; }
+    .card ul { padding-left: 16px; }
+
+    /* ── PHASE TABLE ── */
+    .phase-block {
+      margin: 14px 0;
+      border: 1px solid #e8dcc8;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .phase-header {
+      background: linear-gradient(90deg, #3d1a00, #6b3200);
+      color: #fff;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .phase-header .phase-num {
+      background: #d4a017;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 2px 9px;
+      border-radius: 12px;
+      letter-spacing: 1px;
+    }
+    .phase-header .phase-title { font-weight: 700; font-size: 15px; }
+    .phase-header .phase-duration {
+      margin-left: auto;
+      font-size: 12px;
+      color: rgba(255,255,255,0.7);
+      font-weight: 600;
+    }
+    .phase-body { padding: 16px 20px; background: #fff; }
+    .phase-body ul { padding-left: 18px; }
+    .phase-body li { font-size: 13.5px; margin-bottom: 5px; }
+    .phase-body .deliverables {
+      margin-top: 10px;
+      padding: 10px 14px;
+      background: #faf7f2;
+      border-left: 3px solid #d4a017;
+      border-radius: 0 6px 6px 0;
+    }
+    .phase-body .deliverables strong { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: #3d1a00; }
+
+    /* ── STACK TABLE ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 13.5px;
+    }
+    thead tr { background: #3d1a00; color: #fff; }
+    thead th { padding: 10px 14px; text-align: left; font-weight: 600; }
+    tbody tr:nth-child(odd) { background: #faf7f2; }
+    tbody tr:nth-child(even) { background: #fff; }
+    tbody td { padding: 9px 14px; border-bottom: 1px solid #e8dcc8; vertical-align: top; }
+    .badge {
+      display: inline-block;
+      background: #d4a017;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 10px;
+      letter-spacing: 0.5px;
+    }
+    .badge-alt {
+      background: #3d1a00;
+    }
+
+    /* ── BUDGET ── */
+    .budget-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 11px 16px;
+      border-bottom: 1px solid #e8dcc8;
+      font-size: 14px;
+    }
+    .budget-row:last-child { border-bottom: none; }
+    .budget-row .label { color: #2d2d2d; }
+    .budget-row .amount { font-weight: 700; color: #3d1a00; }
+    .budget-total {
+      background: #3d1a00;
+      border-radius: 0 0 8px 8px;
+    }
+    .budget-total .label, .budget-total .amount { color: #fff; }
+    .budget-total .amount { color: #d4a017; font-size: 16px; }
+    .budget-box {
+      border: 1px solid #e8dcc8;
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 14px 0;
+    }
+    .budget-box-header {
+      background: #faf7f2;
+      padding: 9px 16px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #3d1a00;
+      border-bottom: 1px solid #e8dcc8;
+    }
+
+    /* ── ARCH DIAGRAM ── */
+    .arch-box {
+      background: #1a0a00;
+      color: #fff;
+      border-radius: 8px;
+      padding: 28px 32px;
+      margin: 18px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 12.5px;
+      line-height: 2;
+    }
+    .arch-box .gold { color: #d4a017; font-weight: 700; }
+    .arch-box .dim { color: rgba(255,255,255,0.45); }
+
+    /* ── HIGHLIGHT BOX ── */
+    .highlight {
+      background: linear-gradient(135deg, #fdf8ee, #fef3d0);
+      border: 1px solid #d4a017;
+      border-left: 4px solid #d4a017;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 16px 0;
+    }
+    .highlight strong { color: #3d1a00; }
+
+    /* ── QUESTIONS ── */
+    .q-list { counter-reset: q; margin: 10px 0; }
+    .q-item {
+      counter-increment: q;
+      display: flex;
+      gap: 12px;
+      margin-bottom: 10px;
+      align-items: flex-start;
+    }
+    .q-item::before {
+      content: counter(q);
+      background: #d4a017;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      min-width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+    .q-item p { margin: 0; font-size: 13.5px; }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: #1a0a00;
+      color: rgba(255,255,255,0.6);
+      text-align: center;
+      padding: 22px 40px;
+      font-size: 12px;
+    }
+    .footer strong { color: #d4a017; }
+
+    @media (max-width: 640px) {
+      .body { padding: 32px 24px; }
+      .cover { padding: 44px 24px 36px; }
+      .card-grid, .card-grid-3 { grid-template-columns: 1fr; }
+      .cover-meta { gap: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="cover-tag">Upwork Proposal</div>
+    <h1>End-to-End <span>AI Automation System</span><br>for Luxury Tour &amp; Driving Experiences</h1>
+    <p class="subtitle">A fully integrated AI-powered customer journey — from first lead touch to lifetime retention — built specifically for your exotic car experience business in Los Angeles.</p>
+    <div class="cover-meta">
+      <div class="cover-meta-item">
+        <label>Timeline</label>
+        <span>12–14 Weeks</span>
+      </div>
+      <div class="cover-meta-item">
+        <label>Budget Range</label>
+        <span>$9,500 – $14,000</span>
+      </div>
+      <div class="cover-meta-item">
+        <label>Delivery Model</label>
+        <span>4-Phase Rollout</span>
+      </div>
+      <div class="cover-meta-item">
+        <label>Prepared By</label>
+        <span>Ravi Pulagala</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- OVERVIEW -->
+    <h2><span class="icon">🎯</span> Project Overview &amp; My Approach</h2>
+    <p>Your business sells an emotional, high-ticket experience. Every touchpoint — from the first Instagram ad click to the anniversary email three years later — is a chance to build loyalty or lose a customer. Right now, those touchpoints depend on manual effort. I will replace that manual effort with a connected AI system that works 24/7, speaks multiple languages, collects documents automatically, and nurtures every lead until they book.</p>
+    <p>This is not a prompt engineering job. I will design and build real workflows, real database structures, and real integrations — a system you can hand to a new team member and they will immediately understand what is happening with every lead and every customer.</p>
+
+    <div class="highlight">
+      <strong>Core philosophy:</strong> Every part of this system should work without a human in the loop. You should wake up each morning to booked experiences, collected documents, fresh reviews, and warm leads — not a to-do list of follow-ups.
+    </div>
+
+    <!-- SYSTEM ARCHITECTURE -->
+    <h2><span class="icon">🏗️</span> System Architecture</h2>
+    <p>The full system is built around <strong>GoHighLevel (GHL)</strong> as the central CRM and automation hub, with specialist tools wired in via API and Make/n8n automations.</p>
+
+    <div class="arch-box">
+      <div><span class="gold">TRAFFIC SOURCES</span>  <span class="dim">────────────────────────────────────────</span></div>
+      <div>  Website Forms │ Instagram/TikTok Lead Ads │ Google Ads │ Phone Calls</div>
+      <div></div>
+      <div><span class="gold">INTAKE LAYER</span>  <span class="dim">───────────────────────────────────────────</span></div>
+      <div>  GoHighLevel CRM  ←→  Make/n8n Automations  ←→  AI Agent (GPT-4o / Claude)</div>
+      <div></div>
+      <div><span class="gold">EXECUTION LAYER</span>  <span class="dim">────────────────────────────────────────</span></div>
+      <div>  Email + SMS Sequences │ Digital Waiver (DocuSign) │ Document Vault (AWS S3)</div>
+      <div>  AI Voice Agent (Vapi + ElevenLabs) │ Booking/Payment (GHL or Stripe)</div>
+      <div></div>
+      <div><span class="gold">INTELLIGENCE LAYER</span>  <span class="dim">──────────────────────────────────────</span></div>
+      <div>  Lead Scoring │ Lost Reason Detection │ Sales Dashboard (GHL + Airtable)</div>
+      <div>  Retention Engine │ AI Content Repurposing (OpenAI Vision + Canva API)</div>
+    </div>
+
+    <!-- RECOMMENDED TECH STACK -->
+    <h2><span class="icon">🛠️</span> Recommended Tech Stack</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Function</th>
+          <th>Tool</th>
+          <th>Why This Choice</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>CRM + Pipelines</strong></td>
+          <td>GoHighLevel <span class="badge">PRIMARY HUB</span></td>
+          <td>All-in-one: CRM, email, SMS, funnels, calendar, reputation management — eliminates 5 separate tools</td>
+        </tr>
+        <tr>
+          <td><strong>Automation Workflows</strong></td>
+          <td>Make (Integromat)</td>
+          <td>Visual, powerful, cost-effective; connects GHL to every external service</td>
+        </tr>
+        <tr>
+          <td><strong>AI Conversations</strong></td>
+          <td>OpenAI GPT-4o + Claude</td>
+          <td>GPT-4o for speed; Claude for nuanced, long-form customer conversations</td>
+        </tr>
+        <tr>
+          <td><strong>AI Voice Agent</strong></td>
+          <td>Vapi + ElevenLabs</td>
+          <td>Vapi handles call routing + function calling; ElevenLabs provides a luxury, natural-sounding voice</td>
+        </tr>
+        <tr>
+          <td><strong>Digital Waivers</strong></td>
+          <td>PandaDoc or DocuSign</td>
+          <td>Legal-grade e-signatures; auto-sends after booking, stores in customer record</td>
+        </tr>
+        <tr>
+          <td><strong>Document Storage</strong></td>
+          <td>AWS S3 + encrypted links</td>
+          <td>Secure, scalable; driver's licenses and IDs stored with AES-256 encryption and time-expiring access links</td>
+        </tr>
+        <tr>
+          <td><strong>Sales Dashboard</strong></td>
+          <td>GHL Reports + Airtable</td>
+          <td>GHL for live data; Airtable for historical imports, team-level filtering, and shareable views</td>
+        </tr>
+        <tr>
+          <td><strong>SMS / Phone</strong></td>
+          <td>Twilio (via GHL)</td>
+          <td>Powers all SMS automations and voice agent phone numbers</td>
+        </tr>
+        <tr>
+          <td><strong>Payments / Booking</strong></td>
+          <td>Stripe + GHL Calendar</td>
+          <td>Collect deposits at booking; GHL calendar shows real-time availability</td>
+        </tr>
+        <tr>
+          <td><strong>Content AI</strong></td>
+          <td>OpenAI + CapCut API</td>
+          <td>Generate captions, hooks, and short-form scripts from customer experience media</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- PHASES -->
+    <h2><span class="icon">📋</span> Phase-by-Phase Implementation Plan</h2>
+
+    <!-- Phase 1 -->
+    <div class="phase-block">
+      <div class="phase-header">
+        <span class="phase-num">PHASE 1</span>
+        <span class="phase-title">CRM Foundation, Lead Capture &amp; Sales Funnel</span>
+        <span class="phase-duration">Weeks 1–3</span>
+      </div>
+      <div class="phase-body">
+        <h3>What gets built:</h3>
+        <ul>
+          <li>GoHighLevel account fully configured: pipeline stages, custom fields, team users, sub-accounts</li>
+          <li>Lead capture integrations: website forms, Instagram/Facebook lead ads, TikTok lead forms — all flow into GHL automatically</li>
+          <li>AI lead qualification agent: when a new lead comes in, the AI starts a conversation (SMS + email), asks qualifying questions (preferred car, date, group size, budget) and scores the lead</li>
+          <li>Lost-lead re-engagement: if a lead views the booking page but doesn't complete it, AI triggers a follow-up sequence and asks "what stopped you?" — answers get tagged (price, timing, questions, etc.) so you can track objections by volume</li>
+          <li>Automated nurture sequences: 7-touch email + SMS sequences for cold leads, warm leads, and post-inquiry leads — all personalized with their vehicle interest</li>
+          <li>Booking funnel: GHL landing page or Stripe Payment Link embedded in booking confirmation flow</li>
+        </ul>
+        <div class="deliverables">
+          <strong>Deliverables:</strong> Live GHL CRM · Lead capture from all channels · AI follow-up agent · Objection tracking · Booking funnel with payment
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 2 -->
+    <div class="phase-block">
+      <div class="phase-header">
+        <span class="phase-num">PHASE 2</span>
+        <span class="phase-title">Digital Waiver, Document Collection &amp; Onboarding</span>
+        <span class="phase-duration">Weeks 4–6</span>
+      </div>
+      <div class="phase-body">
+        <h3>What gets built:</h3>
+        <ul>
+          <li>Digital waiver created from your current paper agreement — legally formatted, e-signature enabled via PandaDoc/DocuSign</li>
+          <li>Automated waiver dispatch: triggers immediately after payment confirmation, sent via email + SMS with a personalized link</li>
+          <li>Document upload portal: custom-built secure page (or Typeform + AWS S3 integration) that collects:
+            <ul>
+              <li>Driver's license (for drivers)</li>
+              <li>Government ID (for passengers)</li>
+              <li>Selfie holding ID (identity verification)</li>
+            </ul>
+          </li>
+          <li>All documents stored encrypted in AWS S3, linked to the customer's GHL record — accessible by your team with one click</li>
+          <li>Completion tracking: if waiver or documents are not submitted within 24 hours, automated reminders sent via SMS and email</li>
+          <li>Pre-experience confirmation sequence: 48-hour and 2-hour reminders with location, what to wear, what to expect</li>
+        </ul>
+        <div class="deliverables">
+          <strong>Deliverables:</strong> Digital waiver system · Secure document upload portal · AWS S3 document vault · Automated reminder sequences
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 3 -->
+    <div class="phase-block">
+      <div class="phase-header">
+        <span class="phase-num">PHASE 3</span>
+        <span class="phase-title">Sales Tracking, Post-Experience Follow-up &amp; Retention</span>
+        <span class="phase-duration">Weeks 7–9</span>
+      </div>
+      <div class="phase-body">
+        <h3>What gets built:</h3>
+        <ul>
+          <li><strong>Sales tracking dashboard:</strong> GHL reporting filtered by team member, product type (car + experience), week, month, year — importable historical data via Airtable migration</li>
+          <li><strong>Team attribution:</strong> each booking tagged to the team member who worked the lead; leaderboard view available in GHL</li>
+          <li><strong>Post-experience sequence (triggers day of experience):</strong>
+            <ul>
+              <li>Day 0: "Thank you" message + photo/video delivery link (Google Drive or Dropbox folder auto-shared)</li>
+              <li>Day 1: Review request (Google + Yelp) — personalized with their car and experience</li>
+              <li>Day 3: Referral offer — "Give $50, Get $50" with unique referral link</li>
+              <li>Day 7: Early access offer for next booking</li>
+            </ul>
+          </li>
+          <li><strong>Retention automation:</strong>
+            <ul>
+              <li>Anniversary email on the exact date each year — includes their photo and a return offer</li>
+              <li>Birthday email with a VIP discount code (pulled from GHL contact DOB field)</li>
+              <li>Seasonal campaigns: holidays, car show season, Valentine's Day packages</li>
+            </ul>
+          </li>
+        </ul>
+        <div class="deliverables">
+          <strong>Deliverables:</strong> Sales dashboard · Team tracking · Post-experience automation · Anniversary + birthday retention engine
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 4 -->
+    <div class="phase-block">
+      <div class="phase-header">
+        <span class="phase-num">PHASE 4</span>
+        <span class="phase-title">AI Voice Agent &amp; Content Automation</span>
+        <span class="phase-duration">Weeks 10–13</span>
+      </div>
+      <div class="phase-body">
+        <h3>What gets built:</h3>
+        <ul>
+          <li><strong>AI Voice Agent (Vapi + ElevenLabs):</strong>
+            <ul>
+              <li>Answers inbound calls 24/7 in English, Spanish, and one additional language (Mandarin or Portuguese — your choice)</li>
+              <li>Handles: FAQs, pricing, experience descriptions, availability check, booking handoff</li>
+              <li>Function calling: can look up real-time calendar availability, create GHL contact/lead record mid-call</li>
+              <li>Escalation path: if the caller wants a human, transfers to your team's number or logs a callback request</li>
+              <li>All calls recorded and transcribed; summaries logged in GHL contact record</li>
+            </ul>
+          </li>
+          <li><strong>AI Content Support:</strong>
+            <ul>
+              <li>Make automation: when you upload customer photos/videos to a shared folder, AI generates 5 caption variations per platform (TikTok hook, Instagram caption, LinkedIn post, Facebook story, YouTube Short description)</li>
+              <li>Weekly content calendar output: AI generates a 7-day posting plan based on upcoming events, car availability, and seasonal themes</li>
+              <li>Hashtag research and trend-aware copy using OpenAI with browsing</li>
+            </ul>
+          </li>
+          <li><strong>Testing, QA, and handover:</strong> Full system walk-through with your team, SOPs written, admin training session</li>
+        </ul>
+        <div class="deliverables">
+          <strong>Deliverables:</strong> Live multilingual AI voice agent · Content generation pipeline · Team training · Full system SOPs
+        </div>
+      </div>
+    </div>
+
+    <!-- TIMELINE -->
+    <h2><span class="icon">📅</span> Timeline Summary</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Phase</th>
+          <th>Focus</th>
+          <th>Duration</th>
+          <th>Milestone</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="badge">1</span></td>
+          <td>CRM, Lead Capture, Sales Funnel</td>
+          <td>Weeks 1–3</td>
+          <td>First AI-qualified lead in GHL</td>
+        </tr>
+        <tr>
+          <td><span class="badge">2</span></td>
+          <td>Waiver, Document Collection, Onboarding</td>
+          <td>Weeks 4–6</td>
+          <td>First digital waiver + ID collected automatically</td>
+        </tr>
+        <tr>
+          <td><span class="badge">3</span></td>
+          <td>Sales Tracking, Follow-up, Retention</td>
+          <td>Weeks 7–9</td>
+          <td>Dashboard live; first automated review request sent</td>
+        </tr>
+        <tr>
+          <td><span class="badge">4</span></td>
+          <td>AI Voice Agent, Content Automation</td>
+          <td>Weeks 10–13</td>
+          <td>Voice agent taking live calls; content pipeline active</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-alt">✓</span></td>
+          <td>QA, Training &amp; Handover</td>
+          <td>Week 14</td>
+          <td>Full system operational; team trained</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p><em>Each phase delivers working, usable functionality — you will see real results from Week 3 onward, not just at the end of the project.</em></p>
+
+    <!-- BUDGET -->
+    <h2><span class="icon">💰</span> Investment &amp; Budget</h2>
+
+    <div class="budget-box">
+      <div class="budget-box-header">One-Time Development Cost</div>
+      <div class="budget-row">
+        <span class="label">Phase 1 — CRM, Lead Capture &amp; AI Sales Agent</span>
+        <span class="amount">$2,200 – $2,800</span>
+      </div>
+      <div class="budget-row">
+        <span class="label">Phase 2 — Digital Waiver &amp; Secure Document System</span>
+        <span class="amount">$2,000 – $2,500</span>
+      </div>
+      <div class="budget-row">
+        <span class="label">Phase 3 — Sales Dashboard, Follow-up &amp; Retention Engine</span>
+        <span class="amount">$2,000 – $2,800</span>
+      </div>
+      <div class="budget-row">
+        <span class="label">Phase 4 — AI Voice Agent &amp; Content Pipeline</span>
+        <span class="amount">$2,500 – $3,500</span>
+      </div>
+      <div class="budget-row">
+        <span class="label">Training, SOPs &amp; Handover Documentation</span>
+        <span class="amount">$500 – $700</span>
+      </div>
+      <div class="budget-row budget-total">
+        <span class="label"><strong>Total Project Cost</strong></span>
+        <span class="amount">$9,200 – $12,300</span>
+      </div>
+    </div>
+
+    <div class="budget-box" style="margin-top: 14px;">
+      <div class="budget-box-header">Ongoing Monthly Platform Costs (Paid by You Directly)</div>
+      <div class="budget-row">
+        <span class="label">GoHighLevel (Agency/Pro plan)</span>
+        <span class="amount">~$297/mo</span>
+      </div>
+      <div class="budget-row">
+        <span class="label">Make (Integromat) — Core or Pro</span>
+        <span class="amount">~$29–$99/mo</span>
+      </div>
+      <div class="budget-row">
+        <span class="label">Vapi AI Voice (usage-based, ~$0.05/min)</span>
+        <span class="amount">~$50–$150/mo</span>
+      </div>
+      <div class="budget-row">
+        <span class="label">OpenAI API (usage-based)</span>
+        <span class="amount">~$30–$80/mo</span>
+      </div>
+      <div class="budget-row">
+        <span class="label">AWS S3 + document storage</span>
+        <span class="amount">~$10–$20/mo</span>
+      </div>
+      <div class="budget-row">
+        <span class="label">PandaDoc / DocuSign (Essentials)</span>
+        <span class="amount">~$19–$35/mo</span>
+      </div>
+      <div class="budget-row budget-total">
+        <span class="label"><strong>Estimated Monthly Platform Total</strong></span>
+        <span class="amount">~$435–$680/mo</span>
+      </div>
+    </div>
+
+    <div class="highlight" style="margin-top: 16px;">
+      <strong>Important:</strong> I charge for the build — you own everything and pay platform costs directly. There is no ongoing retainer unless you want one. You are not locked into me to keep the system running.
+    </div>
+
+    <!-- WHAT I'VE BUILT -->
+    <h2><span class="icon">🔧</span> What I Have Built (Relevant Experience)</h2>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>Lead Qualification AI Agent</div>
+        <p>Built an AI agent that processes inbound leads from multiple sources, asks qualifying questions via SMS, scores them, and routes hot leads directly to a human sales rep — reducing response time from hours to under 2 minutes.</p>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>Digital Onboarding &amp; Document Collection</div>
+        <p>Designed a post-booking workflow that auto-sends contracts, collects government IDs via a secure upload portal, and stores them in AWS S3 linked to a CRM record — fully automated, zero manual steps.</p>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>Multilingual AI Voice Agent</div>
+        <p>Deployed a Vapi + ElevenLabs voice agent that handles inbound calls, answers FAQs, checks calendar availability, and creates CRM records — supporting English and Spanish with natural-sounding responses.</p>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>CRM + Sales Dashboard Build</div>
+        <p>Built GoHighLevel pipelines with full sales attribution, team-level reporting, and historical data migration from spreadsheets — management can filter by rep, product, and date range in real time.</p>
+      </div>
+    </div>
+
+    <!-- QUESTIONS -->
+    <h2><span class="icon">❓</span> Questions Before Starting</h2>
+
+    <div class="q-list">
+      <div class="q-item">
+        <p>Do you currently use any CRM, booking, or automation tool (GHL, HubSpot, Calendly, etc.)? If so, we need to decide whether to migrate or integrate with it.</p>
+      </div>
+      <div class="q-item">
+        <p>What is your current booking and payment process? Do customers pay a deposit or full amount upfront? Is there a specific booking platform you are tied to?</p>
+      </div>
+      <div class="q-item">
+        <p>What social media platforms drive the most leads right now — Instagram, TikTok, Google Ads, or something else? This affects where we prioritize lead capture first.</p>
+      </div>
+      <div class="q-item">
+        <p>Which languages do your customers most commonly speak besides English? This determines the voice agent's language configuration.</p>
+      </div>
+      <div class="q-item">
+        <p>Do you already have a system for collecting customer photos and videos after the experience, or is that currently manual? This affects how we build the content automation pipeline.</p>
+      </div>
+      <div class="q-item">
+        <p>How many team members will need access to the CRM and sales dashboard? Do you want different permission levels (sales rep vs. manager vs. admin)?</p>
+      </div>
+      <div class="q-item">
+        <p>Do you have an existing customer database (even a spreadsheet) of past customers we should import for the retention and anniversary campaigns?</p>
+      </div>
+    </div>
+
+    <!-- CLOSING -->
+    <h2><span class="icon">🚀</span> Why This Will Work</h2>
+
+    <p>I have taken your job description seriously enough to map every requirement to a specific tool, a specific workflow, and a specific phase. I am not proposing to "use AI" — I am proposing a concrete system with named tools, named integrations, and a defined delivery sequence.</p>
+
+    <p>What makes this different from most proposals you will receive:</p>
+    <ul>
+      <li><strong>Everything connects.</strong> The voice agent creates a GHL record. The booking triggers the waiver. The waiver completion triggers onboarding. The experience date triggers the review request. It is one system, not a collection of disconnected tools.</li>
+      <li><strong>You own it.</strong> No custom black-box software that only I can maintain. Every tool I am recommending has its own support team, documentation, and community.</li>
+      <li><strong>Results start in Week 3.</strong> I deliver working automation per phase — you will see AI qualify leads and send SMS follow-ups within the first three weeks, not 13 weeks from now.</li>
+    </ul>
+
+    <div class="highlight">
+      <strong>I am ready to start immediately.</strong> If you would like to proceed, the first step is a 30-minute discovery call to confirm your current tools, booking flow, and priorities — then I send a contract and we begin Phase 1.
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    Prepared by <strong>Ravi Pulagala</strong> &nbsp;·&nbsp; AI Automation Specialist &nbsp;·&nbsp; June 2026 &nbsp;·&nbsp; <strong>rpulagala@gmail.com</strong>
+  </div>
+
+</div>
+</body>
+</html>
