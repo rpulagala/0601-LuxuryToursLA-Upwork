@@ -115,18 +115,29 @@ else:
             f"({ev['channel']}): *{ev['subject']}* — `{ev['time']}`"
         )
 
-# ── Reset ─────────────────────────────────────────────────────────────────────
+# ── Demo controls ─────────────────────────────────────────────────────────────
 st.divider()
-if st.button("🗑️  Reset All Demo Data", type="secondary"):
-    db = get_db()
-    try:
-        db.query(NurtureEvent).delete()
-        db.query(Conversation).delete()
-        db.query(Booking).delete()
-        db.query(Lead).delete()
-        db.commit()
+ctrl1, ctrl2 = st.columns(2)
+
+with ctrl1:
+    if st.button("🎬  Load Sample Data", use_container_width=True):
+        from seed_data import seed
+        seed()
         st.session_state.current_lead_id = None
-    finally:
-        db.close()
-    st.success("All demo data cleared.")
-    st.rerun()
+        st.success("Sample data loaded — 5 leads across all pipeline stages.")
+        st.rerun()
+
+with ctrl2:
+    if st.button("🗑️  Reset All Demo Data", type="secondary", use_container_width=True):
+        db = get_db()
+        try:
+            db.query(NurtureEvent).delete()
+            db.query(Conversation).delete()
+            db.query(Booking).delete()
+            db.query(Lead).delete()
+            db.commit()
+            st.session_state.current_lead_id = None
+        finally:
+            db.close()
+        st.success("All demo data cleared.")
+        st.rerun()
