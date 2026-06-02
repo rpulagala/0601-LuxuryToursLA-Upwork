@@ -11,6 +11,16 @@ st.set_page_config(
 
 init_db()
 
+# Auto-seed on first load (handles Streamlit Cloud ephemeral filesystem)
+_db = get_db()
+_empty = _db.query(Lead).count() == 0
+_db.close()
+if _empty:
+    import random
+    random.seed(42)
+    from seed_data import seed
+    seed()
+
 if "current_lead_id" not in st.session_state:
     st.session_state.current_lead_id = None
 
