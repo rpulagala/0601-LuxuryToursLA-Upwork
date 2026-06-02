@@ -3,9 +3,9 @@ from sqlalchemy.orm import declarative_base, relationship, sessionmaker
 from datetime import datetime
 import os
 
-DB_PATH = os.path.join(os.path.dirname(__file__), "leads.db")
+DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "leads.db")
 engine = create_engine(f"sqlite:///{DB_PATH}", connect_args={"check_same_thread": False})
-SessionLocal = sessionmaker(bind=engine)
+SessionLocal = sessionmaker(engine)   # bind= removed in SQLAlchemy 2.0
 Base = declarative_base()
 
 
@@ -68,7 +68,7 @@ class NurtureEvent(Base):
 
 
 def init_db():
-    Base.metadata.create_all(bind=engine)
+    Base.metadata.create_all(engine)   # bind= removed in SQLAlchemy 2.0
 
 
 def get_db():
