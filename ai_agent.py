@@ -2,8 +2,9 @@ import json
 import os
 import re
 import streamlit as st
-import google.generativeai as genai
 from dotenv import load_dotenv
+from google import genai
+from google.genai import types
 from database import get_db, Conversation
 
 load_dotenv()
@@ -32,6 +33,8 @@ Scoring guide — N should be an integer:
 - Solo/pair AND budget $500+: score 7 or 8
 - Budget unclear or under $500: score 4 to 6"""
 
+MODEL = "gemini-2.0-flash"
+
 
 def _get_api_key() -> str:
     # .env locally → st.secrets on Streamlit Cloud
@@ -41,41 +44,37 @@ def _get_api_key() -> str:
             key = st.secrets.get("GEMINI_API_KEY", "")
         except Exception:
             pass
-    return key
+    return key if key and key != "your-gemini-api-key-here" else ""
 
 
-def _get_model():
-    api_key = _get_api_key()
-    if not api_key or api_key == "your-gemini-api-key-here":
-        return None
-    genai.configure(api_key=api_key)
-    return genai.GenerativeModel("gemini-1.5-flash")
+def _get_client():
+    key = _get_api_key()
+    return genai.Client(api_key=key) if key else None
 
 
 def get_opening_message(first_name: str) -> str:
-    model = _get_model()
     fallback = (
-        f"Hey {first_name}! 🏎️ Welcome to Velocity LA — "
+        f"Hey {first_name}! Welcome to Velocity LA — "
         "which car are you dreaming of driving: Lamborghini, Ferrari, McLaren, Porsche, or Rolls-Royce?"
     )
-    if not model:
+    client = _get_client()
+    if not client:
         return fallback
     prompt = (
         f"You are Maya from Velocity LA luxury car experiences. "
         f"Write a warm, exciting opening SMS to {first_name} who just submitted a form. "
         f"Mention we have Lamborghini, Ferrari, McLaren, Porsche, and Rolls-Royce. "
-        f"Ask which car interests them most. Under 30 words. Start with one car emoji."
+        f"Ask which car interests them most. Under 30 words. No emojis."
     )
     try:
-        return model.generate_content(prompt).text.strip()
+        response = client.models.generate_content(model=MODEL, contents=prompt)
+        return response.text.strip()
     except Exception:
         return fallback
 
 
 def get_ai_response(lead_id: int, user_message: str) -> tuple[str, dict | None]:
     """Return (response_text, qualification_dict_or_None)."""
-    model = _get_model()
-
     db = get_db()
     try:
         messages = (
@@ -84,41 +83,44 @@ def get_ai_response(lead_id: int, user_message: str) -> tuple[str, dict | None]:
             .order_by(Conversation.timestamp)
             .all()
         )
-        history_lines = []
-        for m in messages:
-            speaker = "Customer" if m.role == "user" else "Maya (you)"
-            history_lines.append(f"{speaker}: {m.message}")
+        history_lines = [
+            f"{'Customer' if m.role == 'user' else 'Maya (you)'}: {m.message}"
+            for m in messages
+        ]
         history_text = "\n".join(history_lines)
     finally:
         db.close()
 
-    if not model:
-        # Fallback: cycle through qualifying questions without AI
-        fallback_questions = [
+    def _scripted_fallback() -> str:
+        asked = sum(1 for m in messages if m.role == "assistant")
+        questions = [
             "Which car interests you most — Lamborghini, Ferrari, McLaren, Porsche, or Rolls-Royce?",
             "Great choice! What date or timeframe are you thinking for the experience?",
             "Perfect! How many people will be in your group?",
-            "Awesome! And roughly what budget are you working with — under $500, $500–$1,000, or $1,000+?",
+            "Awesome! And roughly what budget are you working with — under $500, $500-$1,000, or $1,000+?",
         ]
-        asked = sum(1 for m in messages if m.role == "assistant") if messages else 0
-        if asked < len(fallback_questions):
-            return fallback_questions[asked], None
-        return "You're all set! Let me grab a booking link for you.", None
+        return questions[asked] if asked < len(questions) else "You're all set! Let me grab a booking link for you."
 
-    prompt = f"""{SYSTEM_PROMPT}
+    client = _get_client()
+    if not client:
+        return _scripted_fallback(), None
 
----
-CONVERSATION SO FAR:
-{history_text}
-
-Customer: {user_message}
-
-Your response as Maya (SMS style, max 2 sentences):"""
+    prompt = (
+        f"{SYSTEM_PROMPT}\n\n"
+        f"---\nCONVERSATION SO FAR:\n{history_text}\n\n"
+        f"Customer: {user_message}\n\n"
+        f"Your response as Maya (SMS style, max 2 sentences):"
+    )
 
     try:
-        response_text = model.generate_content(prompt).text.strip()
-    except Exception as e:
-        return f"Sorry, I'm having a moment — could you repeat that? (error: {e})", None
+        response = client.models.generate_content(
+            model=MODEL,
+            contents=prompt,
+            config=types.GenerateContentConfig(temperature=0.7),
+        )
+        response_text = response.text.strip()
+    except Exception:
+        return _scripted_fallback(), None
 
     qual_data = None
     if "QUALIFIED:" in response_text:
