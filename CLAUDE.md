@@ -10,7 +10,23 @@ A **client demo app** for a Luxury Tour & Exotic Car AI Automation pitch (Upwork
 - `Proposal_Luxury_Tour_AI_Automation.html` — standalone client-facing proposal
 - `project_luxury_tour_ai_automation_memory.md` — internal project context
 
-## Running the App
+## Live App (Streamlit Cloud)
+
+| Page | URL |
+|---|---|
+| Executive Dashboard | https://0601-luxurytoursla-upwork.streamlit.app/ |
+| Pipeline | https://0601-luxurytoursla-upwork.streamlit.app/Pipeline |
+| Conversations | https://0601-luxurytoursla-upwork.streamlit.app/Conversations |
+| Waiver & Docs | https://0601-luxurytoursla-upwork.streamlit.app/Waiver_Docs |
+| Sales Tracking | https://0601-luxurytoursla-upwork.streamlit.app/Sales |
+| Post Experience | https://0601-luxurytoursla-upwork.streamlit.app/Post_Experience |
+| Retention | https://0601-luxurytoursla-upwork.streamlit.app/Retention |
+| Voice Agent | https://0601-luxurytoursla-upwork.streamlit.app/Voice_Agent |
+| Content Generator | https://0601-luxurytoursla-upwork.streamlit.app/Content_Gen |
+
+**GitHub:** `rpulagala/0601-LuxuryToursLA-Upwork` · branch `main`
+
+## Running Locally
 
 ```
 streamlit run streamlit_app.py
