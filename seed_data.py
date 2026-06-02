@@ -1,13 +1,11 @@
 """
-Generates 100 realistic demo leads across all pipeline stages.
+Generates realistic demo leads across all pipeline stages.
 Run directly:  python seed_data.py
-Or called from the app on first load / dashboard button.
+Or called from the app on first load.
 """
 import random
 from datetime import datetime, timedelta
 from database import init_db, get_db, Lead, Conversation, Booking, NurtureEvent
-
-# ── Source data ────────────────────────────────────────────────────────────────
 
 FIRST_NAMES = [
     "James","Marcus","Tyler","Kevin","Brian","Jason","Chris","Ryan","David","Michael",
@@ -38,7 +36,25 @@ CARS = [
     "Rolls-Royce Ghost",
 ]
 
-SOURCES = ["Website","Instagram","TikTok","Google Ads","Friend / Referral"]
+PRICE_MAP = {
+    "Lamborghini Huracán":  599.0,
+    "Ferrari 488 GTB":      549.0,
+    "McLaren 720S":         649.0,
+    "Porsche 911 GT3 RS":   499.0,
+    "Rolls-Royce Ghost":    449.0,
+}
+
+SOURCES = ["Website", "Instagram", "TikTok", "Google Ads", "Friend / Referral"]
+
+CITIES = [
+    "Beverly Hills, CA", "West Hollywood, CA", "Santa Monica, CA",
+    "Bel Air, CA", "Malibu, CA", "Manhattan Beach, CA",
+    "Calabasas, CA", "Sherman Oaks, CA", "Pasadena, CA",
+    "Brentwood, CA", "Encino, CA", "Studio City, CA",
+    "Los Angeles, CA", "Culver City, CA", "Marina del Rey, CA",
+]
+
+TEAM_MEMBERS = ["John Carter", "Mike Johnson", "Sarah Williams", "David Brown"]
 
 DATES = [
     "This Saturday","This Sunday","Next Saturday","Next Sunday",
@@ -48,14 +64,13 @@ DATES = [
     "Flexible — anytime in July","Flexible — anytime in August",
 ]
 
-BUDGETS_HIGH   = ["$1,000+", "$1,500+", "Over $1,000", "Budget is not an issue"]
-BUDGETS_MID    = ["$500–$1,000", "Around $700", "Around $800", "$500 to $1,000"]
-BUDGETS_LOW    = ["Under $500", "Around $400", "Around $300–$400", "Looking for something affordable"]
+BUDGETS_HIGH = ["$1,000+", "$1,500+", "Over $1,000", "Budget is not an issue"]
+BUDGETS_MID  = ["$500–$1,000", "Around $700", "Around $800", "$500 to $1,000"]
+BUDGETS_LOW  = ["Under $500", "Around $400", "Around $300–$400", "Looking for something affordable"]
 
-GROUPS_LARGE   = ["3", "4", "5", "4 people", "Group of 5", "3 of us"]
-GROUPS_SMALL   = ["1", "2", "Solo", "Just me", "My partner and I", "2 of us"]
+GROUPS_LARGE = ["3", "4", "5", "4 people", "Group of 5", "3 of us"]
+GROUPS_SMALL = ["1", "2", "Solo", "Just me", "My partner and I", "2 of us"]
 
-# Conversation templates: list of (role, message_template)
 QUALIFIED_CONVOS = [
     [
         ("assistant", "Hey {name}! Welcome to Velocity LA — which car are you dreaming of driving: Lamborghini, Ferrari, McLaren, Porsche, or Rolls-Royce?"),
@@ -120,6 +135,8 @@ NURTURE_TOUCHES = [
      "message": "Hi {name},\n\nTop questions:\n✅ Do I need a racing license? No.\n✅ How long? 60-90 mins.\n✅ Can friends watch? Yes!\n\nReady?\n\nMaya | Velocity LA"},
 ]
 
+TIME_SLOTS = ["9:00 AM", "11:00 AM", "1:00 PM", "3:00 PM", "5:00 PM"]
+
 
 def _make_name():
     return f"{random.choice(FIRST_NAMES)} {random.choice(LAST_NAMES)}"
@@ -127,14 +144,14 @@ def _make_name():
 
 def _make_email(name):
     parts = name.lower().split()
-    suffix = random.choice(["gmail.com","outlook.com","icloud.com","yahoo.com"])
+    suffix = random.choice(["gmail.com", "outlook.com", "icloud.com", "yahoo.com"])
     sep = random.choice([".", "_", ""])
     num = str(random.randint(1, 99)) if random.random() > 0.5 else ""
     return f"{parts[0]}{sep}{parts[1]}{num}@{suffix}"
 
 
 def _make_phone():
-    area = random.choice(["310","323","213","424","818","626","562","714","949","619"])
+    area = random.choice(["310", "323", "213", "424", "818", "626", "562", "714", "949", "619"])
     return f"+1 ({area}) {random.randint(200,999)}-{random.randint(1000,9999)}"
 
 
@@ -153,7 +170,6 @@ def seed():
     init_db()
     db = get_db()
     try:
-        # Wipe
         db.query(NurtureEvent).delete()
         db.query(Conversation).delete()
         db.query(Booking).delete()
@@ -173,8 +189,8 @@ def seed():
 
         leads_created = 0
 
-        # ── 1. BOOKED (8 leads) ─────────────────────────────────────────────
-        for i in range(8):
+        # ── 1. BOOKED (25 leads spread over last 30 days for chart data) ─────
+        for i in range(25):
             name   = unique_name()
             car    = random.choice(CARS)
             date   = random.choice(DATES[:8])
@@ -183,13 +199,17 @@ def seed():
             score  = round(random.uniform(8.0, 10.0), 1)
             g_num  = int(group.split()[0]) if group.split()[0].isdigit() else 2
             g_num  = max(1, min(g_num, 5))
+            # Spread confirmed_at over last 30 days, skewed more recent
+            days_ago = int(random.triangular(0, 30, 5))
+            confirmed = now - timedelta(days=days_ago, hours=random.randint(0, 23))
 
             lead = Lead(
                 name=name, email=_make_email(name), phone=_make_phone(),
+                city=random.choice(CITIES),
                 source=random.choice(SOURCES), preferred_car=car,
                 preferred_date=date, group_size=str(g_num), budget=budget,
                 score=score, pipeline_stage="Booked", tag="Hot",
-                created_at=now - timedelta(hours=random.randint(2, 72)),
+                created_at=confirmed - timedelta(hours=random.randint(2, 48)),
             )
             db.add(lead); db.flush()
 
@@ -198,21 +218,21 @@ def seed():
                 db.add(Conversation(
                     lead_id=lead.id, role=role,
                     message=_fill(msg, name, car, date, group, budget),
-                    timestamp=now - timedelta(hours=random.randint(2,48), minutes=j*15),
+                    timestamp=confirmed - timedelta(hours=random.randint(2, 48), minutes=j * 15),
                 ))
 
-            PRICES = {"Lamborghini Huracán":"$599","Ferrari 488 GTB":"$549",
-                      "McLaren 720S":"$649","Porsche 911 GT3 RS":"$499","Rolls-Royce Ghost":"$449"}
-            times  = ["9:00 AM","11:00 AM","1:00 PM","3:00 PM","5:00 PM"]
+            price_val = PRICE_MAP.get(car, 499.0)
             db.add(Booking(
                 lead_id=lead.id, slot_date=date,
-                slot_time=random.choice(times), car=car,
-                amount=PRICES.get(car, "$499"),
-                confirmed_at=now - timedelta(hours=random.randint(1, 48)),
+                slot_time=random.choice(TIME_SLOTS), car=car,
+                amount=f"${int(price_val)}",
+                price=price_val,
+                team_member=random.choice(TEAM_MEMBERS),
+                confirmed_at=confirmed,
             ))
             leads_created += 1
 
-        # ── 2. QUALIFIED HOT (22 leads, score 8–10) ────────────────────────
+        # ── 2. QUALIFIED HOT (22 leads, score 8–10) ───────────────────────────
         for i in range(22):
             name   = unique_name()
             car    = random.choice(CARS)
@@ -223,6 +243,7 @@ def seed():
 
             lead = Lead(
                 name=name, email=_make_email(name), phone=_make_phone(),
+                city=random.choice(CITIES),
                 source=random.choice(SOURCES), preferred_car=car,
                 preferred_date=date, group_size=group.split()[0],
                 budget=budget, score=score,
@@ -236,11 +257,11 @@ def seed():
                 db.add(Conversation(
                     lead_id=lead.id, role=role,
                     message=_fill(msg, name, car, date, group, budget),
-                    timestamp=now - timedelta(hours=random.randint(1,48), minutes=j*12),
+                    timestamp=now - timedelta(hours=random.randint(1, 48), minutes=j * 12),
                 ))
             leads_created += 1
 
-        # ── 3. QUALIFIED WARM (20 leads, score 6–7) ────────────────────────
+        # ── 3. QUALIFIED WARM (20 leads, score 6–7) ───────────────────────────
         for i in range(20):
             name   = unique_name()
             car    = random.choice(CARS)
@@ -251,6 +272,7 @@ def seed():
 
             lead = Lead(
                 name=name, email=_make_email(name), phone=_make_phone(),
+                city=random.choice(CITIES),
                 source=random.choice(SOURCES), preferred_car=car,
                 preferred_date=date, group_size=group.split()[0],
                 budget=budget, score=score,
@@ -264,11 +286,11 @@ def seed():
                 db.add(Conversation(
                     lead_id=lead.id, role=role,
                     message=_fill(msg, name, car, date, group, budget),
-                    timestamp=now - timedelta(hours=random.randint(2,72), minutes=j*12),
+                    timestamp=now - timedelta(hours=random.randint(2, 72), minutes=j * 12),
                 ))
             leads_created += 1
 
-        # ── 4. CONTACTED — partial convo + nurture (30 leads) ──────────────
+        # ── 4. CONTACTED (30 leads) ───────────────────────────────────────────
         for i in range(30):
             name  = unique_name()
             car   = random.choice(CARS)
@@ -278,6 +300,7 @@ def seed():
 
             lead = Lead(
                 name=name, email=_make_email(name), phone=_make_phone(),
+                city=random.choice(CITIES),
                 source=random.choice(SOURCES), preferred_car=car,
                 preferred_date="", group_size="", budget="", score=0.0,
                 pipeline_stage="Contacted", tag="New",
@@ -290,7 +313,7 @@ def seed():
                 db.add(Conversation(
                     lead_id=lead.id, role=role,
                     message=_fill(msg, name, car, date, group, ""),
-                    timestamp=now - timedelta(hours=random.randint(6,120), minutes=j*20),
+                    timestamp=now - timedelta(hours=random.randint(6, 120), minutes=j * 20),
                 ))
 
             first = name.split()[0]
@@ -304,13 +327,14 @@ def seed():
                 ))
             leads_created += 1
 
-        # ── 5. NEW LEAD — just submitted form (20 leads) ────────────────────
+        # ── 5. NEW LEAD (20 leads) ─────────────────────────────────────────────
         for i in range(20):
             name = unique_name()
             car  = random.choice(CARS)
 
             lead = Lead(
                 name=name, email=_make_email(name), phone=_make_phone(),
+                city=random.choice(CITIES),
                 source=random.choice(SOURCES), preferred_car=car,
                 preferred_date="", group_size="", budget="", score=0.0,
                 pipeline_stage="New Lead", tag="New",
@@ -344,7 +368,6 @@ if __name__ == "__main__":
         print("Pipeline breakdown:")
         for stage, count in sorted(stages.items()):
             print(f"  {stage:15} {count}")
-        from database import Booking, NurtureEvent
         print(f"Bookings:       {db.query(Booking).count()}")
         print(f"Nurture events: {db.query(NurtureEvent).count()}")
         print(f"Conversations:  {db.query(Conversation).count()}")
